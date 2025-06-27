@@ -1,9 +1,9 @@
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import java.awt.event.*;
-import java.awt.*;
 
 public class Rules extends JFrame implements ActionListener{
     static String name;
@@ -28,9 +28,8 @@ public class Rules extends JFrame implements ActionListener{
         + "1. You have a limited time to answer each question.<br><br>"
         + "2. Each question has four options; only one is correct.<br><br>"
         + "3. No negative marking for incorrect answers.<br><br>"
-        + "4. Once an answer is selected, it cannot be changed.<br><br>"
-        + "5. Try to answer all questions before the timer runs out.<br><br>"
-        + "6. Your final score will be displayed at the end.<br>"
+        + "4. Try to answer all questions before the timer runs out.<br><br>"
+        + "5. Your final score will be displayed at the end.<br>"
         + "</html>"
         );
         add(rules);
