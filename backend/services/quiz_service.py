@@ -42,7 +42,7 @@ Ensure the JSON is valid.
 """
 
     genai.configure(api_key=Config.GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-3.5-flash', generation_config={"response_mime_type": "application/json"})
+    model = genai.GenerativeModel('gemma-4-31b', generation_config={"response_mime_type": "application/json"})
     
     full_prompt = prompt + "\n\nInput Text:\n" + input_text
     
