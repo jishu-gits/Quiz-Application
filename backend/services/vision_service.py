@@ -25,7 +25,7 @@ def analyze_images() -> str:
     logger.info(f"Starting vision analysis on {len(images)} images using Gemini inference API...")
     
     genai.configure(api_key=Config.GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemma-4-31b')
+    model = genai.GenerativeModel('gemini-3.1-flash-lite')
         
     prompt = (
         "Analyze the given image. This image is a part of multiset. "

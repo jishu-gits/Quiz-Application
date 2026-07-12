@@ -14,7 +14,7 @@ cp .env.example .env
 - `GEMINI_API_KEY`: Your Google Gemini API key.
 
 ### Optional Variables (defaults provided):
-- `GEMINI_MODEL`: The model to use (default: `gemini-1.5-flash` or `gemini-3.5-flash`).
+- `GEMINI_MODEL`: The model to use (default: `gemini-3.1-flash-lite`).
 - `FLASK_PORT`: The port the server runs on (default: `5000`).
 
 ## Local Setup
