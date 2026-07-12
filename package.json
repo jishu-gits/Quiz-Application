@@ -1,0 +1,8 @@
+{
+  "name": "quiz-application-root",
+  "private": true,
+  "workspaces": [
+    "web",
+    "backend"
+  ]
+}
