@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+content/
+temp/
+output/
+quiz_out/
+.git
