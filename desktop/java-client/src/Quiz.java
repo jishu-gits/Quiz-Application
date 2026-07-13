@@ -35,7 +35,7 @@ public class Quiz extends JFrame implements ActionListener {
 
         // Background image (upper half)
         try {
-            File file = new File("C:\\Official Store\\Codes\\Java\\Quiz Application\\quiz.jpg");
+            File file = new File("quiz.jpg");
             BufferedImage image = ImageIO.read(file);
             Image resizedImage = image.getScaledInstance(1440, 720, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(resizedImage);

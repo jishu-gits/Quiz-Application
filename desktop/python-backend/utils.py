@@ -27,6 +27,14 @@ def setup_logger(name='quiz_backend'):
         ch.setFormatter(formatter)
         
         logger.addHandler(ch)
+
+        if os.path.isdir(Config.RUNTIME_LOGS_DIR):
+            fh = logging.FileHandler(Config.LOG_FILE, encoding='utf-8')
+            fh.setLevel(logging.INFO)
+            fh.setFormatter(formatter)
+            logger.addHandler(fh)
+        else:
+            logger.warning(f"Runtime log directory is missing: {Config.RUNTIME_LOGS_DIR}")
         
     return logger
 

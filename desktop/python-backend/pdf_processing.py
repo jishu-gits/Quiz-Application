@@ -19,10 +19,7 @@ def extract_images_from_pdf(pdf_path: str) -> int:
     try:
         logger.info(f"Starting PDF to image conversion for: {pdf_path}")
         
-        import shutil
-        pdfinfo_path = shutil.which("pdfinfo")
-        poppler_path = os.path.dirname(pdfinfo_path) if pdfinfo_path else None
-        
+        poppler_path = Config.get_poppler_bin_dir()
         images = pdf2image.convert_from_path(pdf_path, poppler_path=poppler_path)
         
         for idx, image in enumerate(images):
