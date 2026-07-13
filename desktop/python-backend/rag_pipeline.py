@@ -6,7 +6,7 @@ from llm_client import get_vision_model
 
 def analyze_images() -> str:
     """
-    Runs vision inference on each extracted image in TEMP_DIR via Gemini API.
+    Runs vision inference on each extracted image in TEMP_DIR via the local LLM.
     Merges outputs into a single string.
     
     Returns:
@@ -22,7 +22,7 @@ def analyze_images() -> str:
     if not images:
         raise Exception("No images found in the temp folder.")
         
-    logger.info(f"Starting vision analysis on {len(images)} images using Gemini inference API...")
+    logger.info(f"Starting vision analysis on {len(images)} images using the local LLM...")
     
     model = get_vision_model()
         

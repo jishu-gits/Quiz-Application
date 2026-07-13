@@ -1,11 +1,11 @@
 import os
 import json
-import shutil
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from config import Config
 from utils import logger, ensure_directories, cleanup_temp_folder, success_response, error_response
+from startup_checks import verify_startup
 
 from pdf_processing import extract_images_from_pdf
 from rag_pipeline import analyze_images
@@ -15,10 +15,9 @@ def create_app():
     """Application factory for the Flask backend."""
     app = Flask(__name__)
     
-    # Startup Validation for Poppler (pdf2image dependency)
-    if not shutil.which("pdfinfo"):
-        logger.error("CRITICAL: Poppler is not installed or not in PATH. 'pdfinfo' is missing.")
-        logger.error("PDF uploads will fail. Please install poppler-utils.")
+    startup_result = verify_startup()
+    if not startup_result.ok and Config.STARTUP_CHECK_STRICT:
+        raise RuntimeError("Startup verification failed. See the log output for missing requirements.")
     
     # Configure CORS to allow Next.js during development
     # In a strict production environment, you would restrict origins.
@@ -77,8 +76,7 @@ def create_app():
         
         # We parse the quiz string back to dict if possible to keep the response clean,
         # but the legacy contract returned it directly as a string or a JSON object depending on how Flask serialized it.
-        # RAG_Test.ipynb did: jsonify({"message": "...", "quiz": quiz_json}) 
-        # where quiz_json was the raw string from ollama.
+        # The legacy flow returned quiz_json as the raw string from the local model.
         # We maintain this exact format by passing kwargs to our success_response.
         return success_response(
             message="PDF processed successfully", 
