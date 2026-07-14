@@ -17,20 +17,26 @@ class OllamaGenerateModel:
 
     def generate_content(self, content):
         prompt, images = self._normalize_content(content)
+        
+        message = {
+            "role": "user",
+            "content": prompt,
+        }
+        if images:
+            message["images"] = images
+
         payload = {
             "model": Config.OLLAMA_MODEL,
-            "prompt": prompt,
+            "messages": [message],
             "stream": False,
         }
 
-        if images:
-            payload["images"] = images
         if self.response_format:
             payload["format"] = self.response_format
 
         try:
             response = requests.post(
-                _ollama_url("/api/generate"),
+                _ollama_url("/api/chat"),
                 json=payload,
                 timeout=Config.OLLAMA_REQUEST_TIMEOUT,
             )
@@ -41,7 +47,8 @@ class OllamaGenerateModel:
         except ValueError as exc:
             raise RuntimeError("Ollama returned a non-JSON response.") from exc
 
-        return LLMResponse(text=data.get("response", ""))
+        message_obj = data.get("message", {})
+        return LLMResponse(text=message_obj.get("content", ""))
 
     def _normalize_content(self, content):
         if isinstance(content, str):

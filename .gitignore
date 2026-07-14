@@ -69,3 +69,10 @@ MANIFEST
 *.rar
 hs_err_pid*
 replay_pid*
+
+# Desktop Application (PyInstaller/InnoSetup)
+desktop/runtime/
+desktop/installer/output/
+desktop/build/
+desktop/dist/
+desktop/*.spec

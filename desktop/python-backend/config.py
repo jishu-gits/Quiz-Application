@@ -66,7 +66,7 @@ class Config:
 
     # Local LLM config
     OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-    OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llava")
+    OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "granite3.2-vision")
     OLLAMA_REQUEST_TIMEOUT = int(os.getenv("OLLAMA_REQUEST_TIMEOUT", 300))
     DEFAULT_QUESTION_COUNT = int(os.getenv("DEFAULT_QUESTION_COUNT", 10))
 

@@ -140,7 +140,12 @@ public class Login extends JFrame implements ActionListener {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
                 JOptionPane.showMessageDialog(this, "PDF processed successfully!");
-                // Optionally, store or pass the received quiz data to the next screen.
+                String name = tfname.getText().trim();
+                if (name.isEmpty()) {
+                    name = "User";
+                }
+                setVisible(false);
+                new Rules(name);
             } else {
                 JOptionPane.showMessageDialog(this, "Error processing PDF:\n" + response.body());
             }
