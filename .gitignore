@@ -76,3 +76,4 @@ desktop/installer/output/
 desktop/build/
 desktop/dist/
 desktop/*.spec
+node_modules

@@ -1,139 +1,58 @@
 # Quiz Application
 
-A desktop quiz application with a Java Swing client, a local Flask backend, PDF processing, local RAG, and local Ollama-powered question generation.
+A comprehensive quiz generation platform offering both a **Web Version** and a **Desktop Edition**, powered by AI for automatic PDF analysis and quiz generation.
 
-The desktop edition keeps the existing Java UI behavior and communicates with the Python backend only through HTTP.
+## 🚀 Unified Architecture
 
-## Desktop Architecture
+The repository contains three main components:
+1. **Web Frontend (`web/`)**: A Next.js web application built with React, Tailwind CSS, and Framer Motion. It leverages the Gemini API for cloud-based vision processing and RAG to generate quizzes on the fly.
+2. **Desktop Client (`desktop/java-client/`)**: A native Java Swing application for lightweight, native performance, and offline capabilities.
+3. **Local Python Backend (`desktop/python-backend/`)**: A local Flask server that processes PDFs using `pdf2image` and `poppler`, running a local RAG pipeline powered by **Ollama** (e.g. `llava` model).
 
-```
-Java Swing UI
-  -> http://localhost:5000
-Local Python Flask backend
-  -> PDF processing with pdf2image and Poppler
-  -> RAG image analysis
-  -> Ollama local model
-  -> quiz JSON generation
-```
-
-No Python scripts are called directly from Java. The Java client uploads PDFs and fetches generated questions through the existing Flask endpoints.
-
-## Folder Layout
-
-```
-desktop/
-  java-client/
-    src/
-      Login.java
-      Rules.java
-      Quiz.java
-      Score.java
-      icons/
-    login.jpg
-    quiz.jpg
-    score.jpg
-
-  python-backend/
-    app.py
-    config.py
-    llm_client.py
-    startup_checks.py
-    pdf_processing.py
-    rag_pipeline.py
-    quiz_generator.py
-    utils.py
-    requirements.txt
-
-  runtime/
-    poppler/
-    models/
-    logs/
-    config/
-
-  installer/
-  docs/
+```mermaid
+graph TD
+    A[Web Frontend Next.js] --> B(Cloud Gemini API)
+    C[Java Desktop App] --> D(Local Flask Backend)
+    D --> E{Local Ollama}
+    D --> F{Poppler/pdf2image}
+    E --> G[Local Models]
 ```
 
-## Runtime Folders
+## 🌐 Web Version
 
-The desktop runtime folders are prepared but not packaged:
+The Next.js application serves as the main landing page and web-based quiz interface.
 
-- `desktop/runtime/poppler/` stores a local Poppler distribution when one is bundled later.
-- `desktop/runtime/models/` is reserved for local model/runtime assets.
-- `desktop/runtime/logs/` stores backend runtime logs.
-- `desktop/runtime/config/` is reserved for desktop runtime configuration.
+### Features
+- **Modern UI**: Dark-mode glassmorphism design with dynamic animations.
+- **Gemini AI**: Uses Google's Gemini Vision models for extracting text from PDFs and generating context-aware quizzes.
+- **Serverless**: Connects directly to serverless APIs to perform quiz generation securely.
+- **Desktop Download**: Provides an installer (`QuizGeneratorSetup.exe`) to download the offline Desktop Edition.
 
-No installer, executable, or package is created yet.
+### Running the Web Version
+```bash
+cd web
+npm install
+npm run dev
+```
+Open `http://localhost:3000` to view the application.
 
-## Startup Sequence
+## 💻 Desktop Edition
+
+The Desktop Edition keeps the existing Java UI behavior and communicates with the Python backend entirely through HTTP, avoiding direct python script execution from Java.
+
+### Offline & Local AI
 
 1. Start Ollama locally.
-2. Ensure the selected model exists in Ollama.
-3. Start the Python backend.
-4. The backend runs startup checks for Python, Ollama, the selected model, Poppler, and runtime folders.
-5. Run the Java Swing client.
-6. Drop a PDF in the Java UI.
-7. Java sends the PDF to Flask over HTTP.
-8. Flask processes the PDF, runs RAG, calls Ollama, saves the latest quiz JSON, and Java fetches it.
+2. Run the Python backend in `desktop/python-backend/` (`python app.py`).
+3. Launch the Java Swing client.
+4. Drop a PDF in the UI; Java sends the PDF to Flask over HTTP, where RAG and Ollama generate the quiz JSON locally.
 
-## Local Backend
+### Packaging
 
-From the repository root:
+The desktop edition can be built into a standalone Windows Installer (`QuizGeneratorSetup.exe`) using PyInstaller and Inno Setup, which is also distributed via the web version.
 
-```bash
-cd desktop/python-backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-python app.py
-```
+## 🛠 Documentation
 
-The backend listens on:
-
-```text
-http://localhost:5000
-```
-
-The Flask server starts with the same factory and run pattern as the website backend:
-
-```python
-app = create_app()
-app.run(host=Config.HOST, port=Config.PORT, debug=Config.DEBUG, use_reloader=False)
-```
-
-## Backend API
-
-The API contract is unchanged.
-
-| Endpoint | Method | Purpose |
-| --- | --- | --- |
-| `/extract` | POST | Accepts multipart PDF upload in the `file` field and generates quiz JSON. |
-| `/extractQuestions` | GET | Returns the latest generated quiz JSON. |
-| `/health` | GET | Returns backend health status. |
-
-## Java Communication
-
-The Java Swing client uses `java.net.http.HttpClient`:
-
-- `Login.java` sends `POST http://localhost:5000/extract`.
-- `Quiz.java` sends `GET http://localhost:5000/extractQuestions`.
-
-Java does not call Python scripts directly.
-
-## Configuration
-
-Runtime paths and backend settings live in `desktop/python-backend/config.py`.
-
-Common environment overrides:
-
-```text
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-FLASK_DEBUG=True
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llava
-POPPLER_PATH=../runtime/poppler
-DEFAULT_QUESTION_COUNT=10
-```
-
-`llm_client.py` is the only module that knows how to talk to Ollama. The rest of the backend uses the same model call boundary for vision analysis and quiz generation.
+- [Web Architecture](./web/README.md)
+- [Desktop Java/Python Setup](./desktop/README.md)
+- [Backend Architecture](./backend/architecture.md)
